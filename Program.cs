@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 
 namespace working_with_files
 {
@@ -7,24 +8,38 @@ namespace working_with_files
     {
         static void Main(string[] args)
         {
-            string sourcePath = @"../../../../private/tmp/file1.txt";
-            string targetPath = @"../../../../private/tmp/file2.txt";
+            string path = @"../../../../private/tmp/file1.txt";
+
+            FileStream fs = null;
+            StreamReader sr = null;
 
             try
             {
-                FileInfo fileInfo = new FileInfo(sourcePath);
-                fileInfo.CopyTo(targetPath);
+                fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                sr = new StreamReader(fs);
 
-                string[] lines = File.ReadAllLines(sourcePath);
-                foreach(string line in lines)
-                {
-                    Console.WriteLine(line);
-                }
+                string line = sr.ReadLine();
+                Console.WriteLine(line);
 
+                // Tentando atualizar texto enquanto edito no bloco de notas
+                // Mas ele não mostra a atualização e o While printa todas as linhas do txt
+                // while(true)
+                // {
+                //     string line = sr.ReadLine();
+                //     Thread.Sleep(1000);
+                //     Console.WriteLine(line);
+                //     fs.Flush();
+                // }
             }
             catch(IOException e)
             {
-                Console.WriteLine("An error ocurred: " + e.Message);
+                Console.WriteLine("Än error ocurred: ");
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                if(sr != null) sr.Close();
+                if(fs != null) fs.Close();
             }
         }
     }
