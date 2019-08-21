@@ -10,36 +10,29 @@ namespace working_with_files
         {
             string path = @"../../../../private/tmp/file1.txt";
 
-            FileStream fs = null;
+            // FileStream fs = null;
             StreamReader sr = null;
 
             try
             {
-                fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                sr = new StreamReader(fs);
+                // fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                sr = File.OpenText(path);
 
-                string line = sr.ReadLine();
-                Console.WriteLine(line);
-
-                // Tentando atualizar texto enquanto edito no bloco de notas
-                // Mas ele não mostra a atualização e o While printa todas as linhas do txt
-                // while(true)
-                // {
-                //     string line = sr.ReadLine();
-                //     Thread.Sleep(1000);
-                //     Console.WriteLine(line);
-                //     fs.Flush();
-                // }
+                while(!sr.EndOfStream)
+                {
+                    string line = sr.ReadLine();
+                    Console.WriteLine(line);
+                }
             }
             catch(IOException e)
             {
-                Console.WriteLine("Än error ocurred: ");
+                Console.WriteLine("An error ocurred: ");
                 Console.WriteLine(e.Message);
             }
             finally
             {
                 if(sr != null) sr.Close();
-                if(fs != null) fs.Close();
+                // if(fs != null) fs.Close();
             }
         }
     }
